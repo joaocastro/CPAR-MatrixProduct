@@ -26,4 +26,5 @@ sudo ldconfig
 
 ```
 g++ -O2 matrixProd.cpp -o matrix -lpapi
+./matrix
 ```
