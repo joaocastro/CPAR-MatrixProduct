@@ -97,16 +97,19 @@ void OnMultLine(int m_ar, int m_br)
 		for(j=0; j<m_br; j++)
 			phb[i*m_br + j] = (double)(i+1);
 
+	for(i=0; i<m_ar; i++)
+		for(j=0; j<m_ar; j++)
+			phc[i*m_br + j] = (double)0.0;
+
     Time1 = clock();
 
 	for(i=0; i<m_ar; i++)
 	{	for( k=0; k<m_ar; k++)
-		{	temp = phc[i*m_ar+j];
+		{
 			for( j=0; j<m_br; j++)
 			{
-				temp += pha[i*m_ar+k] * phb[k*m_br+j];
+				phc[i*m_ar+j] += pha[i*m_ar+k] * phb[k*m_br+j];
 			}
-			phc[i*m_ar+j]=temp;
 		}
 	}
 
