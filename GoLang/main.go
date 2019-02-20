@@ -49,7 +49,7 @@ func MatrixMult(line, col int) {
 
 	// fmt.Printf("%v", phc)
 	for i := 0; i < 10; i++ {
-		fmt.Println("%v", phc[i])
+		fmt.Println(phc[i])
 	}
 }
 
