@@ -22,9 +22,7 @@ void OnMult(int m_ar, int m_br)
 
 	double *pha, *phb, *phc;
 
-
-
-    pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
+  pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
 	phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
 	phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
 
@@ -32,19 +30,20 @@ void OnMult(int m_ar, int m_br)
 		for(j=0; j<m_ar; j++)
 			pha[i*m_ar + j] = (double)1.0;
 
-
-
 	for(i=0; i<m_br; i++)
 		for(j=0; j<m_br; j++)
 			phb[i*m_br + j] = (double)(i+1);
 
+	for(i=0; i<m_ar; i++)
+		for(j=0; j<m_ar; j++)
+			phc[i*m_br + j] = (double)0.0;
 
-
-    Time1 = clock();
+  Time1 = clock();
 
 	for(i=0; i<m_ar; i++)
 	{	for( j=0; j<m_br; j++)
-		{	temp = 0;
+		{	
+			temp = 0;
 			for( k=0; k<m_ar; k++)
 			{
 				temp += pha[i*m_ar+k] * phb[k*m_br+j];
@@ -53,14 +52,14 @@ void OnMult(int m_ar, int m_br)
 		}
 	}
 
-
-    Time2 = clock();
+  Time2 = clock();
 	sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
 	cout << st;
 
 	cout << "Result matrix: " << endl;
 	for(i=0; i<1; i++)
-	{	for(j=0; j<min(10,m_br); j++)
+	{	
+		for(j=0; j<min(10,m_br); j++)
 			cout << phc[j] << " ";
 	}
 	cout << endl;
@@ -85,7 +84,7 @@ void OnMultLine(int m_ar, int m_br)
 
 
 
-    pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
+  pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
 	phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
 	phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
 
@@ -101,10 +100,11 @@ void OnMultLine(int m_ar, int m_br)
 		for(j=0; j<m_ar; j++)
 			phc[i*m_br + j] = (double)0.0;
 
-    Time1 = clock();
+  Time1 = clock();
 
 	for(i=0; i<m_ar; i++)
-	{	for( k=0; k<m_ar; k++)
+	{	
+		for( k=0; k<m_ar; k++)
 		{
 			for( j=0; j<m_br; j++)
 			{
@@ -114,24 +114,81 @@ void OnMultLine(int m_ar, int m_br)
 	}
 
 
-    Time2 = clock();
+  Time2 = clock();
 	sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
 	cout << st;
 
 	cout << "Result matrix: " << endl;
 	for(i=0; i<1; i++)
-	{	for(j=0; j<min(10,m_br); j++)
+	{	
+		for(j=0; j<min(10,m_br); j++)
 			cout << phc[j] << " ";
 	}
 	cout << endl;
 
-    free(pha);
-    free(phb);
-    free(phc);
-
-
+  free(pha);
+  free(phb);
+  free(phc);
 }
 
+void OnMultBlock(int m_ar, int m_br, int block)
+{
+	SYSTEMTIME Time1, Time2;
+
+	char st[100];
+	double temp;
+	int i, j, k;
+	// i = i / block;
+	// j = j / block;
+	// k = k / block;
+
+	double *pha, *phb, *phc;
+
+  pha = (double *)malloc((m_ar * m_ar) * sizeof(double));
+	phb = (double *)malloc((m_ar * m_ar) * sizeof(double));
+	phc = (double *)malloc((m_ar * m_ar) * sizeof(double));
+
+	for(i=0; i<m_ar; i++)
+		for(j=0; j<m_ar; j++)
+			pha[i*m_ar + j] = (double)1.0;
+
+	for(i=0; i<m_br; i++)
+		for(j=0; j<m_br; j++)
+			phb[i*m_br + j] = (double)(i+1);
+
+	for(i=0; i<m_ar; i++)
+		for(j=0; j<m_ar; j++)
+			phc[i*m_br + j] = (double)0.0;
+
+  Time1 = clock();
+
+	for(i=0; i<m_ar; i++)
+	{	
+		for( k=0; k<m_ar; k++)
+		{
+			for( j=0; j<m_br; j++)
+			{ 
+				phc[i*m_ar+j] += pha[i*m_ar+k] * phb[k*m_br+j];
+			}
+		}
+	}
+
+  Time2 = clock();
+	sprintf(st, "Time: %3.3f seconds\n", (double)(Time2 - Time1) / CLOCKS_PER_SEC);
+	cout << st;
+
+	cout << "Result matrix: " << endl;
+	for(i=0; i<1; i++)
+	{	
+		for(j=0; j<min(10,m_br); j++)
+			cout << phc[j] << " ";
+	}
+	cout << endl;
+
+  free(pha);
+  free(phb);
+  free(phc);
+}
 
 float produtoInterno(float *v1, float *v2, int col)
 {
@@ -142,7 +199,6 @@ float produtoInterno(float *v1, float *v2, int col)
 		soma += v1[i]*v2[i];
 
 	return(soma);
-
 }
 
 void handle_error (int retval)
@@ -169,12 +225,12 @@ int main (int argc, char *argv[])
 {
 
 	char c;
-	int lin, col, nt=1;
+	int lin, col, block, nt=1;
 	int op;
 
 	int EventSet = PAPI_NULL;
-  	long long values[2];
-  	int ret;
+  long long values[2];
+  int ret;
 
 
 	ret = PAPI_library_init( PAPI_VER_CURRENT );
@@ -198,6 +254,7 @@ int main (int argc, char *argv[])
 	do {
 		cout << endl << "1. Multiplication" << endl;
 		cout << "2. Line Multiplication" << endl;
+		cout << "3. Block Multiplication" << endl;
 		cout << "Selection?: ";
 		cin >> op;
 		if (op == 0)
@@ -217,6 +274,8 @@ int main (int argc, char *argv[])
 				break;
 			case 2:
 				OnMultLine(lin, col);
+			case 3:
+				OnMultBlock(lin, col, block);
 
 				break;
 		}
