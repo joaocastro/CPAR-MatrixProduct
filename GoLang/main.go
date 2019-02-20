@@ -54,5 +54,27 @@ func MatrixMult(line, col int) {
 }
 
 func main() {
-	MatrixMult(1000, 1000)
+	var line, col, op int
+
+	for true {
+		fmt.Print("1. Multiplication\n")
+		fmt.Print("2. Line Multiplication\n")
+		fmt.Print("3. Block Multiplication\n")
+		fmt.Print("Selection?\n")
+		fmt.Scanln(&op)
+
+		if op == 1 {
+			fmt.Print("Dimensions? Line&Col: \n")
+			fmt.Scanln(&line)
+			col = line
+
+			MatrixMult(line, col)
+		}
+		if op == 2 {
+
+		}
+		if op == 3 {
+
+		}
+	}
 }
