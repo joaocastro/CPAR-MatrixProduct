@@ -9,6 +9,7 @@
 using namespace std;
 
 #define SYSTEMTIME clock_t
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
 
 
 void OnMult(int m_ar, int m_br)
@@ -138,9 +139,8 @@ void OnMultBlock(int m_ar, int m_br, int block)
 	char st[100];
 	double temp;
 	int i, j, k;
-	// i = i / block;
-	// j = j / block;
-	// k = k / block;
+	int i0, j0, k0;
+	int istep, jstep;
 
 	double *pha, *phb, *phc;
 
@@ -162,13 +162,18 @@ void OnMultBlock(int m_ar, int m_br, int block)
 
   Time1 = clock();
 
-	for(i=0; i<m_ar; i++)
-	{	
-		for( k=0; k<m_ar; k++)
-		{
-			for( j=0; j<m_br; j++)
-			{ 
-				phc[i*m_ar+j] += pha[i*m_ar+k] * phb[k*m_br+j];
+	for (i0 = 0; i0 < m_ar; i0 += block) {
+		for (j0 = 0; j0 < m_br; j0 += block) {
+			for (k0 = 0; k0 < m_ar; k0 += block) {
+				
+				for(i=i0; i<MIN(i0+block, m_ar); i++) {	
+					for(j=j0; j<MIN(j0+block, m_br); j++) {	
+						for(k=k0; k<MIN(k0+block,m_ar); k++) {
+							phc[i*m_ar+j] += pha[i*m_ar+k] * phb[k*m_br+j];
+						}
+					}
+				}
+				
 			}
 		}
 	}
@@ -259,10 +264,13 @@ int main (int argc, char *argv[])
 		cin >> op;
 		if (op == 0)
 			break;
-		printf("Dimensions: lins cols ? ");
+		else if (op == 3) {
+			printf("Dimensions: lins cols block? ");
+   		cin >> lin >> col >> block;
+		} else {
+			printf("Dimensions: lins cols? ");
    		cin >> lin >> col;
-
-
+		}
 
 		// Start counting
 		ret = PAPI_start(EventSet);
@@ -274,9 +282,9 @@ int main (int argc, char *argv[])
 				break;
 			case 2:
 				OnMultLine(lin, col);
+				break;
 			case 3:
 				OnMultBlock(lin, col, block);
-
 				break;
 		}
 
