@@ -136,8 +136,8 @@ float OnMultBlock(int n, int block)
 			for (k0 = 0; k0 < n; k0 += block) {
 				
 				for(i=i0; i<MIN(i0+block, n); i++) {	
-					for(j=j0; j<MIN(j0+block, n); j++) {	
-						for(k=k0; k<MIN(k0+block,n); k++) {
+					for(k=k0; k<MIN(k0+block, n); k++) {	
+						for(j=j0; j<MIN(j0+block,n); j++) {
 							phc[i*n+j] += pha[i*n+k] * phb[k*n+j];
 						}
 					}
