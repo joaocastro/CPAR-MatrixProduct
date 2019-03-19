@@ -131,9 +131,9 @@ func MatrixMultBlock(line, col, block int) {
 		for j0 := 0; j0 < col; j0 += block {
 			for k0 := 0; k0 < line; k0 += block {
 
-				for i := 0; i < Min(line, i0+block); i++ {
-					for k := 0; k < Min(col, k0+block); k++ {
-						for j := 0; j < Min(line, j0+block); j++ {
+				for i := i0; i < Min(line, i0+block); i++ {
+					for k := k0; k < Min(col, k0+block); k++ {
+						for j := j0; j < Min(line, j0+block); j++ {
 							phc[i*line+j] += pha[i*line+k] * phb[k*col+j]
 						}
 					}
